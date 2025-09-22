@@ -1,1 +1,7 @@
-
+Design and Test Bench
+Design: Actual Verilog code (may span multiple files) representing the hardware's intended functionality.
+Test Bench (TB): A Verilog module that instantiates the design, applies stimulus (test vectors), and observes outputs to validate the design’s behavior.
+The test bench does not have primary inputs or outputs; these are properties of the design under test.
+The TB generates input stimuli and monitors output responses internally.
+Simulator Operation
+    
