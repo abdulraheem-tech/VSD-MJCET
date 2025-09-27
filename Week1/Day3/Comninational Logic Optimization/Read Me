@@ -1,1 +1,4 @@
+It means squeezing the logic to get the most optimized design in terms of area and power. the most commonly used techniques are:
 
+Constant propagation using direct optimization
+Boolean logic optimization using K-map and Quine McKlusky
