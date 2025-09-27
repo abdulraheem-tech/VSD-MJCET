@@ -1,1 +1,47 @@
+Optimization of Case1: 3-bit Up Counter with q[0] used (counter_opt.v)
+Example of a counter where bits at the position of [2] and [1] are unused.
+module counter_opt (input clk , input reset , output q);
+reg [2:0] count;
+assign q = count[0];
 
+always @(posedge clk ,posedge reset)
+begin
+	if(reset)
+		count <= 3'b000;
+	else
+		count <= count + 1;
+end
+
+endmodule
+
+The screenshot explains the logic of the counter. Only q[0] is used. So the optimization can be applied
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog counter_opt.v
+synth -top counter_opt
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+
+Optimization of Case2: 3-bit Up Counter (counter_opt2.v)
+Example of a counter where all the bits are used.
+
+module counter_opt (input clk , input reset , output q);
+reg [2:0] count;
+assign q = (count[2:0] == 3'b100);
+
+always @(posedge clk ,posedge reset)
+begin
+	if(reset)
+		count <= 3'b000;
+	else
+		count <= count + 1;
+end
+
+endmodule
+The commands to run the synthesis
+
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog counter_opt.v
+synth -top counter_opt
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
