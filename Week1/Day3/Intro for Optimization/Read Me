@@ -47,5 +47,4 @@ How it is done:
     Constraints Analysis: Maintain timing and functional equivalence.
     Optimization: Adjust register positions to minimize clock period and optimize power.
 
-5. Labs on Optimization
-Lab 1
+
