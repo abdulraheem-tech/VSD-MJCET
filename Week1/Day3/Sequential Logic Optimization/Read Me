@@ -1,47 +1,73 @@
-Optimization of Case1: 3-bit Up Counter with q[0] used (counter_opt.v)
-Example of a counter where bits at the position of [2] and [1] are unused.
-module counter_opt (input clk , input reset , output q);
-reg [2:0] count;
-assign q = count[0];
+Both the dff_const1.v and dff_const2 are explained 
+12-dff-const1-const2
+Optimizing dff_const1.v
+Syntax for dff_const1.v
 
-always @(posedge clk ,posedge reset)
+module dff_const1(input clk, input reset, output reg q);
+always @(posedge clk, posedge reset)
 begin
 	if(reset)
-		count <= 3'b000;
+		q <= 1'b0;
 	else
-		count <= count + 1;
+		q <= 1'b1;
 end
 
 endmodule
+For dff_const1.v, q=0 as long as reset=1. However, when reset=0 q doesn't immediately becomes 1 rather at the next rising edge of the clk as shown below. So the optimization cannot be applied.
 
-The screenshot explains the logic of the counter. Only q[0] is used. So the optimization can be applied
+11-dff-const1
+The commands to run the synthesis
+
 read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-read_verilog counter_opt.v
-synth -top counter_opt
+read_verilog dff_const1.v
+synth -top dff_const1
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+The logic implementation after synthesis for dff_const1.v 
+
+13-dff-const1
+complete dff_const2,4,5
+
+Optimizing dff_const3.v
+Syntax for dff_const3.v
+
+module dff_const3(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+	begin
+		q <= 1'b1;
+		q1 <= 1'b0;
+	end
+	else
+	begin
+		q1 <= 1'b1;
+		q <= q1;
+	end
+end
+
+endmodule
+For dff_const3.v, there are two flops. q1=0 as long as reset=1. However, when reset=0 q1 doesn't immediately becomes 1 rather at the next rising edge of the clk with some propagation delay as shown below. q=1 as long as reset=1, acting as set rather than reset. However, when reset=0 q samples q1 as 0 as there are some propagation delay for q1as shown below. At the next clk edge q samples q1 as 1. So the optimization cannot be applied.
+
+
+The command to run HDL simulation
+
+iverilog dff_const3.v tb_dff_const3.v
+./a.out
+gtkwave tb_dff_const3.vcd
+The HDL simulation is shown below.
+
+15-dff-const3
+The commands to run the synthesis
+
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_const3.v
+synth -top dff_const3
 dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
 
-Optimization of Case2: 3-bit Up Counter (counter_opt2.v)
-Example of a counter where all the bits are used.
 
-module counter_opt (input clk , input reset , output q);
-reg [2:0] count;
-assign q = (count[2:0] == 3'b100);
-
-always @(posedge clk ,posedge reset)
-begin
-	if(reset)
-		count <= 3'b000;
-	else
-		count <= count + 1;
-end
-
-endmodule
-The commands to run the synthesis
-
-read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-read_verilog counter_opt.v
-synth -top counter_opt
-dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
