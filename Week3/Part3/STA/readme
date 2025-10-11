@@ -1,1 +1,44 @@
+Summary of Lab STA
 
+1. git clone https://github.com/parallaxsw/OpenSTA.git
+prerequisite
+Timing Library
+/home/mjcet/VSDBabySoC/VSDBabySoC/src/timing_libs
+read netlist
+
+read sdc
+Using the short of the path using docker
+2.  docker run -it -v /home/mjcet/VSDBabySoC/VSDBabySoC/src:/data opensta
+Reading the timing library max, min
+3. read_liberty -min /data/timing_libs/sky130_fd_sc_hd.v
+
+4. read_liberty -min /data/timing_libs/sky130_fd_sc_hd.v
+5. read_liberty -min /data/timing_libs/avsddac.lib
+6 read_liberty -max /data/timing_libs/avsddac.lib
+7 read_liberty -max /data/timing_libs/avsdpll.lib
+8.read_liberty -min /data/timing_libs/avsdpll.lib
+
+Synthesis netlist file
+
+9. read_verilog /data/module/vsdbabysoc.synth.v
+
+10 link_design vsdbabysoc
+11. read_sdc /data/BabySoC/vsdbabysoc_synthesis.sdc
+
+12 report_checks
+
+13 source /data/sta_across_pvt.tcl
+
+
+--
+
+Thanks & Regards
+
+Dr M A Raheem
+
+Associate Professor
+Department of Electronics and Communication Engineering
+Muffakham Jah College of Engineering and Technology
+Banjara Hills, Hyderabad, Telangana. 500034
+Mobile - 9393327279
+drabdulraheem.in
