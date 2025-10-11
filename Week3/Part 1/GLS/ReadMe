@@ -7,6 +7,35 @@ Make sure the following project structure is set up:
 │   ├── module/            # Verilog modules (vsdbabysoc.v, clkgate.v, rvmyth.v, etc)
 │   └── lib/               # Liberty files (sky130fdschdtt025C1v80.lib, avsddac.lib, avsdpll.lib)
 
+Step1 Open the yosys
+Load the Top-Level and other Verilog files  
+Indicate SV (SystemVerilog) support and all include/module paths. Avoid typographical errors in commands or filenames:
+Step 2 : Read_verilog 
+read_verilog -sv /home/mjcet/VSDBabySoC/VSDBabySoC/src/module/vsdbabysoc.v /home/mjcet/VSDBabySoC/VSDBabySoC/src/module/rvmyth.v 
+/home/mjcet/VSDBabySoC/VSDBabySoC/src/module/clk_gate.v -I /home/mjcet/VSDBabySoC/VSDBabySoC/src/include
+
+Step 3. Load Liberty Cell Libraries
+Load the technology cell library (example for Sky130):
+
+read_liberty -lib /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib/avdspll.lib  /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib/avsddac.lib /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib/sky Specify the Top Module
+
+Step 4 :Set the top-level module for synthesis 
+Synth -top vsdbabysoc.v
+
+Step 5 Technology Mapping
+dfflibmap -liberty /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib//sky130_fd_sc_hd__tt_025C_1v80.lib
+
+
+Step 6 Write the Synthesized Netlist
+write_verilog vsdbabysoc_synth_net.v
+abc -liberty /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib//sky130_fd_sc_hd__tt_025C_1v80.lib
+
+Step 7 Synthesis visualize 
+show vsdbabysoc
+
+POST Synthesis and Simulation Waveforms of vsdbabysoc.v
+
+Step1 Open the yosys
 
 Load the Top-Level and other Verilog files  R
 Indicate SV (SystemVerilog) support and all include/module paths. Avoid typographical errors in commands or filenames:
@@ -24,4 +53,28 @@ Synth -top vsdbabysoc.v
 
 Step 5 Technology Mapping
 dfflibmap -liberty /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib//sky130_fd_sc_hd__tt_025C_1v80.lib
-abc -liberty /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib//sky130_fd_sc_hd__tt_025C_1v80.lib
+
+
+Step 6 Write the Synthesized Netlist
+write_verilog vsdbabysoc_synth_net.v
+abc -liberty /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib//sky130_fd_sc_hd__tt_025C_1v80.lib -script +strash;scorr;ifraig;retime{D};strash;dch,-f;map,-M,1{D}
+command invokes the ABC tool integrated in Yosys for advanced logic optimization and technology mapping. The script applies a sequence of transformations:
+
++strash: Structural hashing to reduce logic.
+scorr: Structural correlation.
+ifraig: Iterative functional reduction.
+retime{D}: Retiming to optimize registers.
+dch,-f: Don't care optimization.
+map,-M,1{D}: Map logic to standard cells with specific constraints.
+
+Step 7 flatten
+Step 8 setundef -zero
+Step 9 clean -purge  (Clean Unused Wires and Cells)
+Step 10 rename -enumerate (rename nets and cells)
+Step 11 stats (print Synthesis )
+Step 12 
+(This exports the final synthesized netlist to a Verilog file without any synthesis attributes (-noattr). This netlist is technology-mapped and optimized, ready for place-and-route or further analysis.)
+write_verilog -noattr /home/mjcet/VSDBabySoC/VSDBabySoC/src/vsdbabysoc.synth.v
+
+
+
