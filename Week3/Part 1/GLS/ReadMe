@@ -1,1 +1,27 @@
+Directory Structure
+Make sure the following project structure is set up:
 
+~/Desktop/labs/Week2/VLSI/VSDBabySoC/
+├── src/
+│   ├── include/           # Verilog include files
+│   ├── module/            # Verilog modules (vsdbabysoc.v, clkgate.v, rvmyth.v, etc)
+│   └── lib/               # Liberty files (sky130fdschdtt025C1v80.lib, avsddac.lib, avsdpll.lib)
+
+
+Load the Top-Level and other Verilog files  R
+Indicate SV (SystemVerilog) support and all include/module paths. Avoid typographical errors in commands or filenames:
+Step 2 : Read_verilog 
+read_verilog -sv /home/mjcet/VSDBabySoC/VSDBabySoC/src/module/vsdbabysoc.v /home/mjcet/VSDBabySoC/VSDBabySoC/src/module/rvmyth.v 
+/home/mjcet/VSDBabySoC/VSDBabySoC/src/module/clk_gate.v -I /home/mjcet/VSDBabySoC/VSDBabySoC/src/include
+
+Step 3. Load Liberty Cell Libraries
+Load the technology cell library (example for Sky130):
+
+read_liberty -lib /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib/avdspll.lib  /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib/avsddac.lib /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib/sky Specify the Top Module
+
+Step 4 :Set the top-level module for synthesis 
+Synth -top vsdbabysoc.v
+
+Step 5 Technology Mapping
+dfflibmap -liberty /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib//sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty /home/mjcet/VSDBabySoC/VSDBabySoC/src/lib//sky130_fd_sc_hd__tt_025C_1v80.lib
