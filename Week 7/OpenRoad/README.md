@@ -63,10 +63,10 @@ cd ~/VLSI/VSDBabySoC/
 
 Initially, you will see only the `rvmyth.tlv` file inside `src/module/`, since the RVMYTH core is written in TL-Verilog.
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="2.png" />
 To convert it into a `.v` file for simulation, follow the steps below:
 
-<strong>🔧<img width="731" height="267" alt="image" src="1.png" /></strong>
+<strong>🔧<img width="731" height="267" alt="image" src="3.png" /></strong>
 
 ```bash
 # Step 1: Install python3-venv (if not already installed)
@@ -74,7 +74,7 @@ sudo apt update
 sudo apt install python3-venv python3-pip
 ```
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="4.png" />
 ```
 # Step 2: Create and activate a virtual environment
 cd ~/VLSI/VSDBabySoC/
@@ -82,25 +82,25 @@ python3 -m venv sp_env
 source sp_env/bin/activate
 ```
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="5.png" />
 
 ```
 # Step 3: Install SandPiper-SaaS inside the virtual environment
 pip install pyyaml click sandpiper-saas
 ```
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="6.png" />
 ```
 # Step 4: Convert rvmyth.tlv to Verilog
 sandpiper-saas -i ./src/module/*.tlv -o rvmyth.v --bestsv --noline -p verilog --outdir ./src/module/
 ```
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="7.png" />
 ✅ After running the above command, rvmyth.v will be generated in the src/module/ directory.
 
 You can confirm this by listing the files:
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="8.png" />
 
 #### Note 
 To use this environment in future sessions, always activate it first:
@@ -122,13 +122,13 @@ cd ~/VLSI/VSDBabySoC/
 mkdir -p output/pre_synth_sim
 iverilog -o ~/Desktop/VLSI/VSDBabySoC/output/pre_synth_sim/pre_synth_sim.out -DPRE_SYNTH_SIM -I ~/Desktop/VLSI/VSDBabySoC/src/include -I ~/Desktop/VLSI/VSDBabySoC/src/module ~/Desktop/VLSI/VSDBabySoC/src/module/testbench.v
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="9.png" />
 Then run:
 ```bash
 cd output/pre_synth_sim
 ./pre_synth_sim.out
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="10.png" />
 
 Explanation:
 
@@ -147,7 +147,7 @@ gtkwave output/pre_synth_sim/pre_synth_sim.vcd
 ```
 Drag and drop the CLK, reset, OUT (DAC), and RV TO DAC [9:0] signals to their respective locations in the simulation tool
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="11.png" />
 In this picture we can see the following signals:
 
 **CLK**: This is the input CLK signal of the RVMYTH core. This signal comes from the PLL, originally.
@@ -166,8 +166,8 @@ This can be viewed by changing the Data Format of the signal to Analog → Step
 
 Drag and drop the CLK, reset, OUT (DAC) (as analog step), and RV TO DAC [9:0] signals to their respective locations in the simulation tool 
 
-<img width="731" height="267" alt="image" src="1.png" />
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="12.png" />
+<img width="731" height="267" alt="image" src="13.png" />
 
 ### Trouble shooting tips
 
@@ -211,12 +211,12 @@ Here is the step-by-step execution plan for running the  commands manually:
 ```bash
 yosys
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="14.png" />
 - Read the main vsdbabysoc.v RTL file into the yosys environment.
 ```bash
 yosys> read_verilog src/module/vsdbabysoc.v 
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="15.png" />
 - The following cp commands copy essential header files from the src/include directory into the working directory. These include:
 
   **sp_verilog.vh** – contains Verilog definitions and macros
@@ -233,12 +233,12 @@ cp -r src/include/sandpiper_gen.vh .
 ls
 ```
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="16.png" />
 - Read the rvmyth.v file with the include path using -I option.
 ```bash
 yosys> read_verilog -I ~/Desktop/VLSI/VSDBabySoC/src/include/ ~/Desktop/VLSI/VSDBabySoC/src/module/rvmyth.v
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="17.png" />
 
 #### ❗Note:
 
@@ -252,7 +252,7 @@ _To avoid these errors, make sure to copy the required include files into your w
 yosys> read_verilog -I ~/Desktop/VLSI/VSDBabySoC/src/include/ ~/Desktop/VLSI/VSDBabySoC/src/module/clk_gate.v
 ```
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="18.png" />
 ### **Step 2: Load the Liberty Files for Synthesis**
 Inside the same yosys shell, run:
 ```bash
@@ -260,18 +260,18 @@ read_liberty -lib ~/Desktop/VLSI/VSDBabySoC/src/lib/avsdpll.lib
 read_liberty -lib ~/Desktop/VLSI/VSDBabySoC/src/lib/avsddac.lib 
 read_liberty -lib ~/Desktop/VLSI/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="19.png" />
 ### **Step 3: Run Synthesis Targeting `vsdbabysoc`**
 ```bash
 yosys> synth -top vsdbabysoc
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="20.png" />
 ### **Step 4: Map D Flip-Flops to Standard Cells**
 
 ```bash
 yosys> dfflibmap -liberty ~/Desktop/VLSI/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="21.png" />
 ### **Step 5: Perform Optimization and Technology Mapping**
 ```bash
 yosys> opt
@@ -289,10 +289,10 @@ yosys> abc -liberty ~/Desktop/VLSI/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1
 | `map,-M,1,{D}` | Map logic to gates minimizing area (`-M,1`) and retime-aware (`{D}`) |
 
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="22.png" />
 
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="23.png" />
 
 ### **Step 6: Perform Final Clean-Up and Renaming**
 
@@ -309,7 +309,7 @@ yosys> rename -enumerate
 | `clean -purge`      | Removes all unused wires, cells, and modules; `-purge` makes it more aggressive.       |
 | `rename -enumerate` | Renames internal wires and cells to unique, numbered names for consistency.            |
 
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="24.png" />
 
 ### **Step 7: Check Statistics**
 ```bash
