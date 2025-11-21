@@ -1,6 +1,10 @@
 ### Sample Output 1
 This is a placeholder description for image 1.
-
+ Design Compiler to load and execute the  script from the  directory, 
+ while printing each command and extra details to the terminal.
+ This is usually done to set up the synthesis environment before running design compilation.
+ file contains (like library loading, search paths, target technology setup),
+ so you know what’s happening behind the scenes when you run this?
 <img src="1.png" width="100%">
 
 
