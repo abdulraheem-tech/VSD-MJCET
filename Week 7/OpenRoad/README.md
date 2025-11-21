@@ -377,4 +377,4 @@ yosys> stat
 
 yosys> write_verilog -noattr ~/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/vsdbabysoc.synth.v
 ```
-<img width="731" height="267" alt="image" src="1.png" />
+<img width="731" height="267" alt="image" src="25.png" />
