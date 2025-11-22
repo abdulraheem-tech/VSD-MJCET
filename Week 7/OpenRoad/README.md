@@ -505,34 +505,6 @@ Timing Exceptions allow control over non-functional or multi-cycle paths. set_fa
 
 Lastly, Power Constraints help manage dynamic and leakage power budgets using set_max_dynamic_power and set_max_leakage_power. These are especially useful in power-aware synthesis and verification flows.
 
-Category	Commands
-Operating Conditions	set_operating_conditions
-Wire-load Models	set_wire_load_mode
-set_wire_load_model
-set_wire_load_selection_group
-Environmental	set_drive
-set_driving_cell
-set_load
-set_fanout_load
-set_input_transition
-set_port_fanout_number
-Design Rules	set_max_capacitance
-set_max_fanout
-set_max_transition
-Timing	create_clock
-create_generated_clock
-set_clock_latency
-set_clock_transition
-set_disable_timing
-set_propagated_clock
-set_clock_uncertainty
-set_input_delay
-set_output_delay
-Exceptions	set_false_path
-set_max_delay
-set_multicycle_path
-Power	set_max_dynamic_power
-set_max_leakage_power
 Installation of OpenSTA
 Note: Installation instructions are adapted from the official OpenSTA repository: 🔗 https://github.com/parallaxsw/OpenSTA
 
@@ -654,12 +626,13 @@ Steps to Install OpenROAD and Run GUI
 1. Clone the OpenROAD Repository
 🧩 Step 1: Install Prerequisites
 Update your system and install core build tools:
-
+```bash
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y build-essential cmake clang g++ gcc git python3 python3-dev \
   libboost-all-dev libtcl tcl-dev tcllib libreadline-dev zlib1g-dev flex bison \
   swig libpcre3-dev qtbase5-dev liblemon-dev libspdlog-dev libeigen3-dev libffi-dev \
   pkg-config libjson-c-dev libzstd-dev
+```
 
   <img width="731" height="267" alt="image" src="29.png" />
 
@@ -673,22 +646,24 @@ cd OpenROAD-flow-scripts
 Step 3: Run the Setup Script
 Run the setup installer (this installs all required third-party libraries):
   <img width="731" height="267" alt="image" src="30.png" />
-  
+```bash  
 sudo ./setup.sh
+```
 This step sets up everything OpenROAD depends on — including Boost, SWIG, Abseil, and more.
 
 Step 4: Build OpenROAD Locally
 Now build OpenROAD itself using the automated build script:
-
+```bash
 ./build_openroad.sh --local
+```
 💡 This step takes about 30–45 minutes depending on cores and RAM.
 
   <img width="731" height="267" alt="image" src="31.png" />
 
   If tests fail to build (common Google Test issue), you can skip them:
-
+```bash
 ./build_openroad.sh --local --disable-tests
-
+```
  <img width="731" height="267" alt="image" src="32.png" />
 
 Step 5: Verify Installation
@@ -703,14 +678,18 @@ verilator --version
 
 Step 6: Run the OpenROAD Flow
 cd flow
+```bash
 make
+```
  <img width="731" height="267" alt="image" src="34.png" />
 
 Step 7. Launch the graphical user interface (GUI) to visualize the final layout
+```bash
  make gui_final
+```
   <img width="731" height="267" alt="image" src="35.png" />
 
-nstallation Complete! You can now explore the full RTL-to-GDSII flow using OpenROAD.
+Installation Complete! You can now explore the full RTL-to-GDSII flow using OpenROAD.
 
 ORFS Directory Structure and File formats
 OpenROAD-flow-scripts/
@@ -836,39 +815,39 @@ This script sets up environment variables and configurations for the design and 
 ________________________________________
 Key Components of config.mk
 Design and Platform Configuration
-•	DESIGN_NICKNAME & DESIGN_NAME: Both are set to "vsdbabysoc," serving as the identifier for the design project.
-•	PLATFORM: Specifies the technology platform as "sky130hd," indicating the process node and design rules to be used.
+	DESIGN_NICKNAME & DESIGN_NAME: Both are set to "vsdbabysoc," serving as the identifier for the design project.
+	PLATFORM: Specifies the technology platform as "sky130hd," indicating the process node and design rules to be used.
 Design Paths
-•	vsdbabysoc_DIR: Defines the directory path for the design files as /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc. This path is constructed using the DESIGN_NICKNAME variable, ensuring consistency and easy access to design resources.
+	vsdbabysoc_DIR: Defines the directory path for the design files as /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc. This path is constructed using the DESIGN_NICKNAME variable, ensuring consistency and easy access to design resources.
 Verilog Files for Synthesis
-•	VERILOG_FILES: Lists the Verilog source files required for synthesis:
+	VERILOG_FILES: Lists the Verilog source files required for synthesis:
 o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v: The main Verilog file for the SoC design.
 o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v: A module within the design, possibly a RISC-V core or related component.
 o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v: A module for clock gating, used to manage power consumption by controlling clock signals.
 Verilog Header Files
-•	VERILOG_INCLUDE_DIRS: Specifies the directory for Verilog header files as /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/include.
-Constraints and Additional Files
-•	SDC_FILE: Points to the constraints file for synthesis located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_synthesis.sdc.
-•	ADDITIONAL_GDS: Lists additional GDS files required for the design:
-o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsddac.gds
-o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsdpll.gds
-•	ADDITIONAL_LEFS: Lists additional LEF files:
-o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsddac.lef
-o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsdpll.lef
-•	ADDITIONAL_LIBS: Lists additional LIB files:
-o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsddac.lib
-o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsdpll.lib
+	VERILOG_INCLUDE_DIRS: Specifies the directory for Verilog header files as /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/include.
+ Constraints and Additional Files
+	SDC_FILE: Points to the constraints file for synthesis located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_synthesis.sdc.
+	ADDITIONAL_GDS: Lists additional GDS files required for the design:
+	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsddac.gds
+	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsdpll.gds
+	ADDITIONAL_LEFS: Lists additional LEF files:
+	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsddac.lef
+	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsdpll.lef
+	ADDITIONAL_LIBS: Lists additional LIB files:
+	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsddac.lib
+	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsdpll.lib
 Pin Order and Macro Placement
-•	FP_PIN_ORDER_CFG: Configuration file for pin order located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/pin_order.cfg.
-•	MACRO_PLACEMENT_CFG: Configuration file for macro placement located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/macro.cfg.
+	FP_PIN_ORDER_CFG: Configuration file for pin order located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/pin_order.cfg.
+	MACRO_PLACEMENT_CFG: Configuration file for macro placement located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/macro.cfg.
 Clock Configuration
-•	CLOCK_PORT & CLOCK_NET: Defines the clock port and net as CLK.
-•	CLOCK_PERIOD: Sets the clock period to 20.0 units.
+	CLOCK_PORT & CLOCK_NET: Defines the clock port and net as CLK.
+	CLOCK_PERIOD: Sets the clock period to 20.0 units.
 Floorplanning Configuration
-•	DIE_AREA: Specifies the die area dimensions as 0 0 1600 1600.
-•	CORE_AREA: Specifies the core area dimensions as 20 20 1590 1590.
+	DIE_AREA: Specifies the die area dimensions as 0 0 1600 1600.
+	CORE_AREA: Specifies the core area dimensions as 20 20 1590 1590.
 Placement Configuration
-•	PLACE_PINS_ARGS: Arguments for pin placement, excluding certain areas on the die:
+	PLACE_PINS_ARGS: Arguments for pin placement, excluding certain areas on the die:
 o	-exclude left:0-600
 o	-exclude left:1000-1600
 o	-exclude right:*
