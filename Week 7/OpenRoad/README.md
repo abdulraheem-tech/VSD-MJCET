@@ -377,7 +377,7 @@ yosys> stat
 
 yosys> write_verilog -noattr ~/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/vsdbabysoc.synth.v
 ```
-<img width="731" height="267" alt="image" src="25.png" />
+<img width="731" height="267" alt="image" src="25a.png" />
 Comparing Pre-Synthesis and Post-Synthesis Output
 To ensure that the synthesis process did not alter the original design behavior, the output from the pre-synthesis simulation was compared with the post-synthesis simulation.
 
