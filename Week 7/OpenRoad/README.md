@@ -812,8 +812,89 @@ export MAX_ROUTING_LAYER = met4
    export MAGIC_EXT_USE_GDS    = 1
 
 This script sets up environment variables and configurations for the design and synthesis of a System-on-Chip (SoC) using the OpenROAD flow. The design is based on the "vsdbabysoc" and targets the "sky130hd" platform.
-________________________________________
+
 Key Components of config.mk
+```bash
+   # Design and Platform Configuration
+   export DESIGN_NICKNAME = vsdbabysoc
+   export DESIGN_NAME = vsdbabysoc
+   export PLATFORM    = sky130hd
+
+  # Design Paths
+  export vsdbabysoc_DIR = /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/$(DESIGN_NICKNAME)
+
+  # Explicitly list Verilog files for synthesis
+   export VERILOG_FILES = /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v \
+                         /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v \
+                         /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v
+
+
+  # Include Directory for Verilog Header Files
+   export VERILOG_INCLUDE_DIRS = $(vsdbabysoc_DIR)/include
+
+  # Constraints File
+    export SDC_FILE = $(vsdbabysoc_DIR)/vsdbabysoc_synthesis.sdc
+
+  # Additional GDS Files
+    export ADDITIONAL_GDS = $(vsdbabysoc_DIR)/gds/avsddac.gds \
+                            $(vsdbabysoc_DIR)/gds/avsdpll.gds
+
+  # Additional LEF Files
+   export ADDITIONAL_LEFS = $(vsdbabysoc_DIR)/lef/avsddac.lef \
+                            $(vsdbabysoc_DIR)/lef/avsdpll.lef
+
+  # Additional LIB Files
+   export ADDITIONAL_LIBS = $(vsdbabysoc_DIR)/lib/avsddac.lib \
+                            $(vsdbabysoc_DIR)/lib/avsdpll.lib
+
+ # Pin Order and Macro Placement Configurations
+   export FP_PIN_ORDER_CFG = $(vsdbabysoc_DIR)/pin_order.cfg
+   export MACRO_PLACEMENT_CFG = $(vsdbabysoc_DIR)/macro.cfg
+
+ # Clock Configuration
+   export CLOCK_PORT = CLK
+   export CLOCK_NET  = $(CLOCK_PORT)
+   export CLOCK_PERIOD = 20.0
+
+# Floorplanning Configuration
+  export DIE_AREA   = 0 0 1600 1600
+  export CORE_AREA  = 10 10 1590 1590
+
+# Routing Configuration
+export GRT_ALLOW_CONGESTION = 1
+export GRT_ADJUSTMENT = 0.2
+export GLOBAL_ROUTE_ARGS = -allow_congestion -verbose
+
+# Skip the optimization step that is causing the crash.
+# (The log showed it was doing 0 repairs anyway).
+export SKIP_INCREMENTAL_REPAIR = 1
+
+# Forces standard cells to stay 20 microns away from macros
+export MACRO_PLACE_HALO = 20 20
+
+# Increase the spacing (pitch) between Horizontal Power Straps (Met5)
+# The default is usually around 180. We increase it to create gaps.
+export FP_PDN_HPITCH = 200
+
+# Routing Configuration
+export MAX_ROUTING_LAYER = met4
+
+# Placement Configuration
+  export PLACE_PINS_ARGS = -exclude left:0-400 -exclude left:1200-1600
+
+# Tuning for Timing and Buffers
+  export TNS_END_PERCENT     = 95
+  export REMOVE_ABC_BUFFERS  = 1
+  export CTS_BUF_DISTANCE    = 300
+  export SKIP_GATE_CLONING   = 1
+
+ # Magic Tool Configuration
+   export MAGIC_ZEROIZE_ORIGIN = 0
+   export MAGIC_EXT_USE_GDS    = 1
+
+```
+
+```bash
 Design and Platform Configuration
 	DESIGN_NICKNAME & DESIGN_NAME: Both are set to "vsdbabysoc," serving as the identifier for the design project.
 	PLATFORM: Specifies the technology platform as "sky130hd," indicating the process node and design rules to be used.
@@ -861,6 +942,7 @@ Timing and Buffer Tuning
 Magic Tool Configuration
 •	MAGIC_ZEROIZE_ORIGIN: Configuration for zeroizing the origin, set to 0.
 •	MAGIC_EXT_USE_GDS: Configuration for using GDS files, set to 1.
+```
 This setup script is crucial for defining the environment and parameters needed for successful synthesis and layout of the "vsdbabysoc" design on the "sky130hd" platform, ensuring that all necessary files and configurations are in place for the design flow.
 Macro Configuration File Documentation
 The macro.cfg file defines the placement coordinates and orientation for hardware macros in a chip design layout, typically used in VLSI/ASIC design flows.
