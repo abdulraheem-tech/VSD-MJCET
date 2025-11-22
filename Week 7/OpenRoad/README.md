@@ -661,4 +661,18 @@ sudo apt install -y build-essential cmake clang g++ gcc git python3 python3-dev 
   swig libpcre3-dev qtbase5-dev liblemon-dev libspdlog-dev libeigen3-dev libffi-dev \
   pkg-config libjson-c-dev libzstd-dev
 
-  <img width="731" height="267" alt="image" src="28.png" />
+  <img width="731" height="267" alt="image" src="29.png" />
+
+ Step 2: Clone the Repositories
+Install OpenROAD-flow scripts (wrapper for Yosys, OpenROAD, etc.):
+
+git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts.git
+cd OpenROAD-flow-scripts
+
+
+Step 3: Run the Setup Script
+Run the setup installer (this installs all required third-party libraries):
+  <img width="731" height="267" alt="image" src="30.png" />
+sudo ./setup.sh
+This step sets up everything OpenROAD depends on — including Boost, SWIG, Abseil, and more.
+
