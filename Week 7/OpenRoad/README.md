@@ -458,3 +458,207 @@ Path 3: Register to Output (reg2out)
 
 Path 4: Input to Output (in2out)
 <img width="731" height="267" alt="image" src="25S.png" />
+Setup and Hold Checks
+-> What is Setup Check?
+
+Is the minimum time that the data must be stable before the clock edge, and if this time is not met, it can lead to setup violations, resulting in incorrect data being stored in the sequential element. The setup check is essential to ensure correct timing behavior of a digital circuit and prevent data loss or other timing-related issues.
+The setup time of a flip-flop depends on the technology node, operating conditions, and other factors. The value of the setup time is usually provided in the logic libraries.
+-> What is Hold Check?
+
+Is the minimum amount of time that the data must remain stable after the clock edge, and if this time is not met, it can lead to hold violations, resulting in incorrect data being stored in the sequential element. The hold check is necessary to prevent issues such as data corruption, metastability, and other timing-related problems in digital circuits.
+Slack Calculation
+Setup and hold slack is defined as the difference between data required time and data arrivals time.
+
+Setup slack = Data required time - Data arrival time
+
+Hold slack = Data arrival time - Data required time
+
+-> What is Data Arrival Time?
+
+The time taken by the signal to travel from the start point to the end point of the digital circuit.
+-> What is Data Required Time?
+
+The time for the clock to traverse through the clock path of the digital circuit.
+-> What is Slack?
+
+It is difference between the desired arrival times and the actual arrival time for a signal.
+Positive Slack indicates that the design is meeting the timing and still it can be improved.
+Zero slack means that the design is critically working at the desired frequency.
+Negative slack means, design has not achieved the specified timings at the specified frequency.
+Slack has to be positive always and negative slack indicates a violation in timing.
+Common SDC Constraints
+In Static Timing Analysis (STA), Synopsys Design Constraints (SDC) are used to define the behavior, environment, and timing requirements of a digital design. These constraints are categorized based on their function and purpose.
+
+Operating Conditions are set using the set_operating_conditions command, which defines the process-voltage-temperature (PVT) corner used during analysis.
+
+Wire-Load Models such as set_wire_load_mode, set_wire_load_model, and set_wire_load_selection_group are used to estimate interconnect capacitance and resistance based on fanout and hierarchy when post-layout parasitics are unavailable.
+
+Environmental Constraints define the electrical behavior of I/Os. The set_drive and set_driving_cell commands model input driving strength or source cell characteristics. Output loads are described using set_load or set_fanout_load. Additional attributes like set_input_transition (input slew) and set_port_fanout_number (expected output fanout) further refine environment models.
+
+Design Rule Constraints ensure physical design adherence. These include set_max_capacitance to limit load, set_max_fanout to cap number of loads, and set_max_transition to restrict slew for signal integrity and EM/IR compliance.
+
+Timing Constraints are the core of STA. create_clock defines primary clocks, while create_generated_clock handles derived clocks. Clock behavior is further detailed using set_clock_latency, set_clock_transition, and set_clock_uncertainty. Timing analysis can be guided with set_propagated_clock to consider actual delays, or set_disable_timing to ignore specific paths.
+
+Signal timing is modeled using set_input_delay and set_output_delay. The set_input_delay command specifies when input data arrives relative to the clock edge, crucial for setup/hold timing analysis. The set_output_delay command defines the required time by which output signals must be valid, helping STA tools verify that data is launched and captured within acceptable timing windows.
+
+Timing Exceptions allow control over non-functional or multi-cycle paths. set_false_path removes paths from analysis, set_max_delay restricts path delay, and set_multicycle_path increases the allowed number of clock cycles for timing paths that do not need single-cycle timing closure.
+
+Lastly, Power Constraints help manage dynamic and leakage power budgets using set_max_dynamic_power and set_max_leakage_power. These are especially useful in power-aware synthesis and verification flows.
+
+Category	Commands
+Operating Conditions	set_operating_conditions
+Wire-load Models	set_wire_load_mode
+set_wire_load_model
+set_wire_load_selection_group
+Environmental	set_drive
+set_driving_cell
+set_load
+set_fanout_load
+set_input_transition
+set_port_fanout_number
+Design Rules	set_max_capacitance
+set_max_fanout
+set_max_transition
+Timing	create_clock
+create_generated_clock
+set_clock_latency
+set_clock_transition
+set_disable_timing
+set_propagated_clock
+set_clock_uncertainty
+set_input_delay
+set_output_delay
+Exceptions	set_false_path
+set_max_delay
+set_multicycle_path
+Power	set_max_dynamic_power
+set_max_leakage_power
+Installation of OpenSTA
+Note: Installation instructions are adapted from the official OpenSTA repository: 🔗 https://github.com/parallaxsw/OpenSTA
+
+Step 1: Clone the Repository
+git clone https://github.com/parallaxsw/OpenSTA.git
+cd OpenSTA
+<img width="731" height="267" alt="image" src="25.png" />
+
+Step 2: Build the Docker Image
+\docker build --file Dockerfile.ubuntu22.04 --tag opensta .
+This builds a Docker image named opensta using the provided Ubuntu 22.04 Dockerfile. All dependencies are installed during this step.
+
+<img width="731" height="267" alt="image" src="26.png" />
+Step 3: Run the OpenSTA Container
+To run a docker container using the OpenSTA image, use the -v option to docker to mount direcories with data to use and -i to run interactively.
+
+\docker run -i -v $HOME:/data opensta
+<img width="731" height="267" alt="image" src="27.png" />
+You now have OpenSTA installed and running inside a Docker container. After successful installation, you will see the % prompt—this indicates that the OpenSTA interactive shell is ready for use.
+
+VSDBabySoC basic timing analysis
+Prepare Required Files
+To begin static timing analysis on the VSDBabySoC design, you must organize and prepare the required files in specific directories.
+
+# Create a directory to store Liberty timing libraries
+~/Desktop/VLSI/VSDBabySoC/OpenSTA$ mkdir -p examples/timing_libs/
+~/Desktop/VLSI/VSDBabySoC/OpenSTA/examples$ ls timing_libs/
+avsddac.lib  avsdpll.lib  sky130_fd_sc_hd__tt_025C_1v80.lib
+# Create a directory to store synthesized netlist and constraint files
+~/Desktop/VLSI/VSDBabySoC/OpenSTA$ mkdir -p examples/BabySoC
+~/Desktop/VLSI/VSDBabySoC/OpenSTA/examples$ ls BabySoC/
+gcd_sky130hd.sdc vsdbabysoc_synthesis.sdc  vsdbabysoc.synth.v
+These files include:
+
+Standard cell library: sky130_fd_sc_hd__tt_025C_1v80.lib
+
+IP-specific Liberty libraries: avsdpll.lib, avsddac.lib
+
+Synthesized gate-level netlist: vsdbabysoc.synth.v
+
+Timing constraints: vsdbabysoc_synthesis.sdc
+
+These files include:
+
+Standard cell library: sky130_fd_sc_hd__tt_025C_1v80.lib
+
+IP-specific Liberty libraries: avsdpll.lib, avsddac.lib
+
+Synthesized gate-level netlist: vsdbabysoc.synth.v
+
+Timing constraints: vsdbabysoc_synthesis.sdc
+
+Below is the TCL script to run complete min/max timing checks on the SoC:
+
+vsdbabysoc_min_max_delays.tcl
+Line of Code	Purpose	Explanation
+read_liberty -min ...sky130... & -max ...sky130...	Load standard cell library	Loads the typical PVT corner for both min (hold) and max (setup) timing analysis.
+read_liberty -min/-max avsdpll.lib	Load PLL IP Liberty	Includes Liberty timing views of the PLL IP used in the design.
+read_liberty -min/-max avsddac.lib	Load DAC IP Liberty	Includes Liberty timing views of the DAC IP used in the design.
+read_verilog vsdbabysoc.synth.v	Load synthesized netlist	Loads the gate-level Verilog netlist of the VSDBabySoC design.
+link_design vsdbabysoc	Link top-level module	Links the hierarchy using vsdbabysoc as the top module for timing analysis.
+read_sdc vsdbabysoc_synthesis.sdc	Load constraints	Loads SDC file specifying clock definitions, input/output delays, and false paths.
+report_checks	Run timing analysis	Generates a default setup timing report. Add -path_delay min_max to see both hold and setup.
+execute it inside the Docker container:
+
+\docker run -it -v $HOME:/data opensta /data/VLSI/VSDBabySoC/OpenSTA/examples/BabySoC/vsdbabysoc_min_max_delays.tcl
+⚠️ Possible Error Alert
+
+You may encounter the following error when running the script:
+
+Warning: /data/Desktop/VLSI/VSDBabySoC/OpenSTA/examples/timing_libs/sky130_fd_sc_hd__tt_025C_1v80.lib line 23, default_fanout_load is 0.0.
+Warning: /data/Desktop/VLSI/VSDBabySoC/OpenSTA/examples/timing_libs/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exists.
+Warning: /data/Desktop/VLSI/VSDBabySoC/OpenSTA/examples/timing_libs/sky130_fd_sc_hd__tt_025C_1v80.lib line 23, default_fanout_load is 0.0.
+Error: /data/Desktop/VLSI/VSDBabySoC/OpenSTA/examples/timing_libs/avsdpll.lib line 54, syntax error
+✅ Fix:
+
+This error occurs because Liberty syntax does not support // for single-line comments, and more importantly, the { character appearing after // confuses the Liberty parser. Specifically, check around line 54 of avsdpll.lib and correct any syntax issues such as:
+
+//pin (GND#2) {
+//  direction : input;
+//  max_transition : 2.5;
+//  capacitance : 0.001;
+//}
+✔️ Replace with:
+
+/*
+pin (GND#2) {
+  direction : input;
+  max_transition : 2.5;
+  capacitance : 0.001;
+}
+*/
+
+
+After fixing the Liberty file comment syntax as shown above, you can rerun the script to perform complete timing analysis for VSDBabySoC:
+
+<img width="731" height="267" alt="image" src="28.png" />
+
+VSDBabySoC PVT Corner Analysis (Post-Synthesis Timing)
+Static Timing Analysis (STA) is performed across various PVT (Process-Voltage-Temperature) corners to ensure the design meets timing requirements under different conditions.
+
+Critical Timing Corners
+Worst Max Path (Setup-critical) Corners:
+
+ss_LowTemp_LowVolt
+ss_HighTemp_LowVolt
+These represent the slowest operating conditions.
+Worst Min Path (Hold-critical) Corners:
+
+ff_LowTemp_HighVolt
+ff_HighTemp_HighVolt
+These represent the fastest operating conditions.
+Timing libraries required for this analysis can be downloaded from:
+🔗 Skywater PDK - sky130_fd_sc_hd Timing Libraries
+
+OpenROAD is an open-source, fully automated RTL-to-GDSII flow for digital integrated circuit (IC) design. It supports synthesis, floorplanning, placement, clock tree synthesis, routing, and final layout generation. OpenROAD enables rapid design iterations, making it ideal for academic research and industry prototyping.
+
+Steps to Install OpenROAD and Run GUI
+1. Clone the OpenROAD Repository
+🧩 Step 1: Install Prerequisites
+Update your system and install core build tools:
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y build-essential cmake clang g++ gcc git python3 python3-dev \
+  libboost-all-dev libtcl tcl-dev tcllib libreadline-dev zlib1g-dev flex bison \
+  swig libpcre3-dev qtbase5-dev liblemon-dev libspdlog-dev libeigen3-dev libffi-dev \
+  pkg-config libjson-c-dev libzstd-dev
+
+  <img width="731" height="267" alt="image" src="28.png" />
