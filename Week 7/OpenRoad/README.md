@@ -378,3 +378,83 @@ yosys> stat
 yosys> write_verilog -noattr ~/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/vsdbabysoc.synth.v
 ```
 <img width="731" height="267" alt="image" src="25.png" />
+Comparing Pre-Synthesis and Post-Synthesis Output
+To ensure that the synthesis process did not alter the original design behavior, the output from the pre-synthesis simulation was compared with the post-synthesis simulation.
+
+Both simulations were run using GTKWave, and the resulting waveforms were observed.
+
+✅ The outputs match exactly, confirming that the functionality is preserved across the synthesis flow.
+
+This validates that the synthesized netlist is functionally equivalent to the RTL design.
+
+Timing Graphs using openSTA
+Input Files
+*.v : Gate-level Verilog Netlist
+*.lib : Liberty Timing Libraries
+*.sdc : Synopsys Design Constraints (clocks, delays, false paths)
+*.sdf : Annotated Delay File (optional)
+*.spef: Parasitics (RC extraction)
+*.vcd / *.saif : Switching Activity for Power Analysis
+Clock Modeling Features
+Generated Clocks: Derived from existing clocks
+Latency: Clock propagation delay
+Source Latency: Insertion delay from clock source to input
+Uncertainty: Jitter or skew margins
+Propagated vs. Ideal: Real vs. ideal clock network modeling
+Gated Clock Checks: Verifies clocks that are enabled conditionally
+Multi-Frequency Clocks: Analyzes multiple domains
+Exception Paths
+Timing exceptions refine analysis for real behavior:
+
+set_false_path — Ignores invalid functional paths
+set_multicycle_path — Allows multiple clock cycles
+set_max_delay / set_min_delay — Custom timing limits
+Delay calculation
+Integrated Dartu/Menezes/Pileggi RC effective capacitance algorithm
+Models effective capacitance for RC networks to compute realistic gate and net delays. It balances accuracy and runtime using an efficient algorithm developed for timing engines.
+
+External delay calculator API
+Allows plugging in custom delay calculators for advanced or proprietary models (e.g., layout-aware or temperature-adaptive models). Useful for integrating tool flows beyond standard Liberty data.
+
+Timing Analysis and Reporting
+OpenSTA provides a rich set of commands for analyzing timing paths, delays, and setup/hold checks:
+
+report_checks
+Reports timing violations across specified paths using options like -from, -through, and -to. Supports multi-path analysis to any endpoint.
+
+report_checks -from [get_pins U1/Q] -to [get_pins U2/D]
+Timing Paths
+What do you mean by Timing Paths?
+
+It Refer to the logical paths a signal takes through a digital circuit from its source to its destination, including sequential and combinational elements. STA analyzes timing paths to determine their delay, setup and hold times, and other timing parameters specified in the constraints. Timing paths are categorized into combinatorial and sequential, and the critical path is the longest path in the design with the maximum operating frequency.
+Timing Path Elements
+Timing path elements in STA are the start point, where a signal originates, the end point, where it terminates, and the combinational logic elements, such as gates, that the signal passes through. Timing paths are traced to determine the overall delay and timing performance of the digital circuit.
+
+Start Point: Is the point where the signal originates or enters the digital circuit. This point is typically an input port of the design, where the signal is first introduced to the circuit.
+
+The start point of a timing path can be either:
+
+An input port, where data enters the design, or
+
+The clock pin of a register, where data is launched on a clock edge.
+
+End Point: Is the point where the signal terminates or leaves the digital circuit. This point is typically an output port of the design, where the signal is outputted from the circuit.
+
+The end point of a timing path can be either:
+
+A register's data input pin (D pin), where data is captured by the clock edge, or
+
+An output port, where data must be available at a specific time.
+
+Combinational Logic: Combinational logic elements are the building blocks of a digital circuit and are used to perform logic operations on the signals passing through the circuit. These elements do not store any information, and the output of a combinational logic element is solely determined by the input values at that moment.
+
+The diagram illustrates four distinct timing paths:
+
+Path 1: Input to Register (in2reg)
+
+Path 2: Register to Register (reg2reg)
+
+Path 3: Register to Output (reg2out)
+
+Path 4: Input to Output (in2out)
+<img width="731" height="267" alt="image" src="25S.png" />
