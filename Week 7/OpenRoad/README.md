@@ -673,6 +673,531 @@ cd OpenROAD-flow-scripts
 Step 3: Run the Setup Script
 Run the setup installer (this installs all required third-party libraries):
   <img width="731" height="267" alt="image" src="30.png" />
+  
 sudo ./setup.sh
 This step sets up everything OpenROAD depends on — including Boost, SWIG, Abseil, and more.
+
+Step 4: Build OpenROAD Locally
+Now build OpenROAD itself using the automated build script:
+
+./build_openroad.sh --local
+💡 This step takes about 30–45 minutes depending on cores and RAM.
+
+  <img width="731" height="267" alt="image" src="31.png" />
+
+  If tests fail to build (common Google Test issue), you can skip them:
+
+./build_openroad.sh --local --disable-tests
+
+ <img width="731" height="267" alt="image" src="32.png" />
+
+Step 5: Verify Installation
+source ./env.sh
+yosys -help  
+openroad -help
+yosys --version
+openroad --version
+verilator --version
+
+ <img width="731" height="267" alt="image" src="33.png" />
+
+Step 6: Run the OpenROAD Flow
+cd flow
+make
+ <img width="731" height="267" alt="image" src="34.png" />
+
+Step 7. Launch the graphical user interface (GUI) to visualize the final layout
+ make gui_final
+  <img width="731" height="267" alt="image" src="35.png" />
+
+nstallation Complete! You can now explore the full RTL-to-GDSII flow using OpenROAD.
+
+ORFS Directory Structure and File formats
+OpenROAD-flow-scripts/
+
+├── OpenROAD-flow-scripts             
+│   ├── docker           -> It has Docker based installation, run scripts and all saved here
+│   ├── docs             -> Documentation for OpenROAD or its flow scripts.  
+│   ├── flow             -> Files related to run RTL to GDS flow  
+|   ├── jenkins          -> It contains the regression test designed for each build update
+│   ├── tools            -> It contains all the required tools to run RTL to GDS flow
+│   ├── etc              -> Has the dependency installer script and other things
+│   ├── setup_env.sh     -> Its the source file to source all our OpenROAD rules to run the RTL to GDS 
+
+  <img width="731" height="267" alt="image" src="36.png" />
+
+  Inside the flow/ Directory
+
+├── flow           
+│   ├── design           -> It has built-in examples from RTL to GDS flow across different technology nodes
+│   ├── makefile         -> The automated flow runs through makefile setup
+│   ├── platform         -> It has different technology note libraries, lef files, GDS etc 
+|   ├── tutorials        
+│   ├── util            
+│   ├── scripts                 
+
+  <img width="731" height="267" alt="image" src="37.png" />
+
+  Floorplan and Placement of VSDBabySoC in OpenROAD
+RTL2GDS Flow for VSDBabySoC: Initial Steps
+1.	Create Directories:
+o	Inside OpenROAD-flow-scripts/flow/designs/sky130hd/, create a folder named vsdbabysoc.
+o	Create another folder named vsdbabysoc in OpenROAD-flow-scripts/flow/designs/src/ and place all Verilog files here.
+2.	Copy Folders:
+o	From your VSDBabySoC folder, copy the following folders into sky130hd/vsdbabysoc:
+	gds: Contains avsddac.gds, avsdpll.gds.
+	include: Contains sandpiper.vh, sandpiper_gen.vh, sp_default.vh, sp_verilog.vh.
+	lef: Contains avsddac.lef, avsdpll.lef.
+	lib: Contains avsddac.lib, avsdpll.lib.
+3.	Copy Constraint and Configuration Files:
+o	Copy vsdbabysoc_synthesis.sdc into sky130hd/vsdbabysoc.
+o	Copy macro.cfg and pin_order.cfg into sky130hd/vsdbabysoc.
+4.	Create Config File:
+o	Create a config.mk file in sky130hd/vsdbabysoc with the required configuration details.
+config.mk
+   # Design and Platform Configuration
+   export DESIGN_NICKNAME = vsdbabysoc
+   export DESIGN_NAME = vsdbabysoc
+   export PLATFORM    = sky130hd
+
+  # Design Paths
+  export vsdbabysoc_DIR = /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/$(DESIGN_NICKNAME)
+
+  # Explicitly list Verilog files for synthesis
+   export VERILOG_FILES = /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v \
+                         /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v \
+                         /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v
+
+
+  # Include Directory for Verilog Header Files
+   export VERILOG_INCLUDE_DIRS = $(vsdbabysoc_DIR)/include
+
+  # Constraints File
+    export SDC_FILE = $(vsdbabysoc_DIR)/vsdbabysoc_synthesis.sdc
+
+  # Additional GDS Files
+    export ADDITIONAL_GDS = $(vsdbabysoc_DIR)/gds/avsddac.gds \
+                            $(vsdbabysoc_DIR)/gds/avsdpll.gds
+
+  # Additional LEF Files
+   export ADDITIONAL_LEFS = $(vsdbabysoc_DIR)/lef/avsddac.lef \
+                            $(vsdbabysoc_DIR)/lef/avsdpll.lef
+
+  # Additional LIB Files
+   export ADDITIONAL_LIBS = $(vsdbabysoc_DIR)/lib/avsddac.lib \
+                            $(vsdbabysoc_DIR)/lib/avsdpll.lib
+
+ # Pin Order and Macro Placement Configurations
+   export FP_PIN_ORDER_CFG = $(vsdbabysoc_DIR)/pin_order.cfg
+   export MACRO_PLACEMENT_CFG = $(vsdbabysoc_DIR)/macro.cfg
+
+ # Clock Configuration
+   export CLOCK_PORT = CLK
+   export CLOCK_NET  = $(CLOCK_PORT)
+   export CLOCK_PERIOD = 20.0
+
+# Floorplanning Configuration
+  export DIE_AREA   = 0 0 1600 1600
+  export CORE_AREA  = 10 10 1590 1590
+
+# Routing Configuration
+export GRT_ALLOW_CONGESTION = 1
+export GRT_ADJUSTMENT = 0.2
+export GLOBAL_ROUTE_ARGS = -allow_congestion -verbose
+
+# Skip the optimization step that is causing the crash.
+# (The log showed it was doing 0 repairs anyway).
+export SKIP_INCREMENTAL_REPAIR = 1
+
+# Forces standard cells to stay 20 microns away from macros
+export MACRO_PLACE_HALO = 20 20
+
+# Increase the spacing (pitch) between Horizontal Power Straps (Met5)
+# The default is usually around 180. We increase it to create gaps.
+export FP_PDN_HPITCH = 200
+
+# Routing Configuration
+export MAX_ROUTING_LAYER = met4
+
+# Placement Configuration
+  export PLACE_PINS_ARGS = -exclude left:0-400 -exclude left:1200-1600
+
+# Tuning for Timing and Buffers
+  export TNS_END_PERCENT     = 95
+  export REMOVE_ABC_BUFFERS  = 1
+  export CTS_BUF_DISTANCE    = 300
+  export SKIP_GATE_CLONING   = 1
+
+ # Magic Tool Configuration
+   export MAGIC_ZEROIZE_ORIGIN = 0
+   export MAGIC_EXT_USE_GDS    = 1
+
+This script sets up environment variables and configurations for the design and synthesis of a System-on-Chip (SoC) using the OpenROAD flow. The design is based on the "vsdbabysoc" and targets the "sky130hd" platform.
+________________________________________
+Key Components of config.mk
+Design and Platform Configuration
+•	DESIGN_NICKNAME & DESIGN_NAME: Both are set to "vsdbabysoc," serving as the identifier for the design project.
+•	PLATFORM: Specifies the technology platform as "sky130hd," indicating the process node and design rules to be used.
+Design Paths
+•	vsdbabysoc_DIR: Defines the directory path for the design files as /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc. This path is constructed using the DESIGN_NICKNAME variable, ensuring consistency and easy access to design resources.
+Verilog Files for Synthesis
+•	VERILOG_FILES: Lists the Verilog source files required for synthesis:
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v: The main Verilog file for the SoC design.
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v: A module within the design, possibly a RISC-V core or related component.
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v: A module for clock gating, used to manage power consumption by controlling clock signals.
+Verilog Header Files
+•	VERILOG_INCLUDE_DIRS: Specifies the directory for Verilog header files as /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/include.
+Constraints and Additional Files
+•	SDC_FILE: Points to the constraints file for synthesis located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_synthesis.sdc.
+•	ADDITIONAL_GDS: Lists additional GDS files required for the design:
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsddac.gds
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsdpll.gds
+•	ADDITIONAL_LEFS: Lists additional LEF files:
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsddac.lef
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsdpll.lef
+•	ADDITIONAL_LIBS: Lists additional LIB files:
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsddac.lib
+o	/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsdpll.lib
+Pin Order and Macro Placement
+•	FP_PIN_ORDER_CFG: Configuration file for pin order located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/pin_order.cfg.
+•	MACRO_PLACEMENT_CFG: Configuration file for macro placement located at /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/macro.cfg.
+Clock Configuration
+•	CLOCK_PORT & CLOCK_NET: Defines the clock port and net as CLK.
+•	CLOCK_PERIOD: Sets the clock period to 20.0 units.
+Floorplanning Configuration
+•	DIE_AREA: Specifies the die area dimensions as 0 0 1600 1600.
+•	CORE_AREA: Specifies the core area dimensions as 20 20 1590 1590.
+Placement Configuration
+•	PLACE_PINS_ARGS: Arguments for pin placement, excluding certain areas on the die:
+o	-exclude left:0-600
+o	-exclude left:1000-1600
+o	-exclude right:*
+o	-exclude top:*
+o	-exclude bottom:*
+Timing and Buffer Tuning
+•	TNS_END_PERCENT: Sets the target negative slack end percentage to 100.
+•	REMOVE_ABC_BUFFERS: Enables removal of ABC buffers, set to 1.
+•	CTS_BUF_DISTANCE: Sets the buffer distance for clock tree synthesis to 600.
+•	SKIP_GATE_CLONING: Skips gate cloning during synthesis, set to 1.
+Magic Tool Configuration
+•	MAGIC_ZEROIZE_ORIGIN: Configuration for zeroizing the origin, set to 0.
+•	MAGIC_EXT_USE_GDS: Configuration for using GDS files, set to 1.
+This setup script is crucial for defining the environment and parameters needed for successful synthesis and layout of the "vsdbabysoc" design on the "sky130hd" platform, ensuring that all necessary files and configurations are in place for the design flow.
+Macro Configuration File Documentation
+The macro.cfg file defines the placement coordinates and orientation for hardware macros in a chip design layout, typically used in VLSI/ASIC design flows.
+File Format
+Each line in the configuration file follows this syntax pattern:
+<macro_name> <x_coordinate> <y_coordinate> <orientation>
+Configuration Breakdown
+PLL Macro
+pll 200 950 N
+•	Macro Name: pll (Phase-Locked Loop)
+•	X Coordinate: 200 (horizontal placement position)
+•	Y Coordinate: 950 (vertical placement position)
+•	Orientation: N (North - standard upright orientation)
+The PLL is a critical clock generation and management circuit positioned at coordinates (200, 950) with standard North orientation.
+DAC Macro
+dac 150 250 MY
+•	Macro Name: dac (Digital-to-Analog Converter)
+•	X Coordinate: 150 (horizontal placement position)
+•	Y Coordinate: 250 (vertical placement position)
+•	Orientation: MY (Mirror Y - flipped along the Y-axis)
+The DAC macro handles digital-to-analog conversion and is placed at coordinates (150, 250) with Y-axis mirroring applied.
+Orientation Values
+Common orientation flags include:
+•	N: North (0° rotation, standard)
+•	S: South (180° rotation)
+•	E: East (90° clockwise)
+•	W: West (90° counter-clockwise)
+•	MY: Mirror Y-axis
+•	MX: Mirror X-axis
+Usage
+This configuration file is typically consumed by place-and-route tools during the physical design phase to ensure proper macro placement and avoid routing congestion.
+Edit global_route.tcl
+The Fix: Comment Out the "Extra" Optimizations Since we cannot disable this step via config.mk, we must comment it out in the Tcl script. You don't need Power Recovery for this design anyway.
+Step 1: Open the Script Open the file global_route.tcl in your text editor. (It is likely located at flow/scripts/global_route.tcl or inside your scripts folder).
+Step 2: Comment Out Power Recovery Find the section that looks like this (around line 100-110) and add # to the start of every line to disable it:
+# ----------------- COMMENT THIS BLOCK OUT -----------------
+# log_cmd global_route -start_incremental
+# recover_power_helper
+# # Route the modified nets by rsz journal restore
+# log_cmd global_route -end_incremental {*}$res_aware \
+#   -congestion_report_file $::env(REPORTS_DIR)/congestion_post_recover_power.rpt
+# -----------------------------------------------------------
+global_route.tcl
+  utl::set_metrics_stage "globalroute__{}"
+  source $::env(SCRIPTS_DIR)/load.tcl
+  erase_non_stage_variables grt
+  load_design 4_cts.odb 4_cts.sdc
+  
+  # This proc is here to allow us to use 'return' to return early from this
+  # file which is sourced
+  proc global_route_helper { } {
+    source_env_var_if_exists PRE_GLOBAL_ROUTE_TCL
+
+ set res_aware ""
+ append_env_var res_aware ENABLE_RESISTANCE_AWARE -resistance_aware 0
+
+ proc do_global_route { res_aware } {
+   set all_args [concat [list \
+     -congestion_report_file $::global_route_congestion_report] \
+     $::env(GLOBAL_ROUTE_ARGS) {*}$res_aware]
+
+   log_cmd global_route {*}$all_args
+ }
+ set additional_args ""
+ append_env_var additional_args dbProcessNode -db_process_node 1
+ append_env_var additional_args VIA_IN_PIN_MIN_LAYER -via_in_pin_bottom_layer 1
+ append_env_var additional_args VIA_IN_PIN_MAX_LAYER -via_in_pin_top_layer 1
+
+ pin_access {*}$additional_args
+
+ set result [catch { do_global_route $res_aware } errMsg]
+
+ if { $result != 0 } {
+   if { !$::env(GENERATE_ARTIFACTS_ON_FAILURE) } {
+     write_db $::env(RESULTS_DIR)/5_1_grt-failed.odb
+     error $errMsg
+   }
+   write_sdc -no_timestamp $::env(RESULTS_DIR)/5_1_grt.sdc
+   write_db $::env(RESULTS_DIR)/5_1_grt.odb
+   return
+ }
+
+ set_placement_padding -global \
+   -left $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT) \
+   -right $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
+
+ set_propagated_clock [all_clocks]
+ estimate_parasitics -global_routing
+
+ if { [env_var_exists_and_non_empty DONT_USE_CELLS] } {
+   set_dont_use $::env(DONT_USE_CELLS)
+ }
+
+ if { !$::env(SKIP_INCREMENTAL_REPAIR) } {
+   if { $::env(DETAILED_METRICS) } {
+     report_metrics 5 "global route pre repair design"
+   }
+
+# Repair design using global route parasitics
+repair_design_helper
+if { $::env(DETAILED_METRICS) } {
+  report_metrics 5 "global route post repair design"
+}
+
+# Running DPL to fix overlapped instances
+# Run to get modified net by DPL
+log_cmd global_route -start_incremental
+log_cmd detailed_placement
+# Route only the modified net by DPL
+log_cmd global_route -end_incremental {*}$res_aware \
+  -congestion_report_file $::env(REPORTS_DIR)/congestion_post_repair_design.rpt
+
+# Repair timing using global route parasitics
+puts "Repair setup and hold violations..."
+estimate_parasitics -global_routing
+
+repair_timing_helper
+
+if { $::env(DETAILED_METRICS) } {
+  report_metrics 5 "global route post repair timing"
+}
+
+# Running DPL to fix overlapped instances
+# Run to get modified net by DPL
+log_cmd global_route -start_incremental
+log_cmd detailed_placement
+# Route only the modified net by DPL
+log_cmd global_route -end_incremental {*}$res_aware \
+  -congestion_report_file $::env(REPORTS_DIR)/congestion_post_repair_timing.rpt
+ }
+
+
+  #  log_cmd global_route -start_incremental
+  #  recover_power_helper
+ # Route the modified nets by rsz journal restore
+  #  log_cmd global_route -end_incremental {*}$res_aware \
+-congestion_report_file $::env(REPORTS_DIR)/congestion_post_recover_power.rpt
+
+ if {
+   !$::env(SKIP_ANTENNA_REPAIR) &&
+   [env_var_exists_and_non_empty MAX_REPAIR_ANTENNAS_ITER_GRT]
+ } {
+puts "Repair antennas..."
+repair_antennas -iterations $::env(MAX_REPAIR_ANTENNAS_ITER_GRT)
+check_placement -verbose
+check_antennas -report_file $::env(REPORTS_DIR)/grt_antennas.log
+ }
+
+ puts "Estimate parasitics..."
+ estimate_parasitics -global_routing
+
+ report_metrics 5 "global route"
+
+ # Write SDC to results with updated clock periods that are just failing.
+ # Use make target update_sdc_clock to install the updated sdc.
+ source [file join $::env(SCRIPTS_DIR) "write_ref_sdc.tcl"]
+
+ write_guides $::env(RESULTS_DIR)/route.guide
+ write_db $::env(RESULTS_DIR)/5_1_grt.odb
+ write_sdc -no_timestamp $::env(RESULTS_DIR)/5_1_grt.sdc
+  }
+
+  global_route_helper
+Another Fix thanks to the @BitopanBaishya
+He modified the macro_place_util.tcl file so that it reads the macro.cfg as follows:
+He replaced
+log_cmd rtl_macro_placer {*}$all_args
+with
+  # Manual macro placement using macro.cfg
+if { [env_var_exists_and_non_empty MACRO_PLACEMENT_CFG] } {
+
+set fp [open $::env(MACRO_PLACEMENT_CFG) r]
+while {[gets $fp line] >= 0} {
+# skip empty and comment lines
+if {[regexp {^\s*$} $line]} continue
+if {[regexp {^#} $line]} continue
+
+# Parse: <macro> <x> <y> <orient>
+scan $line "%s %f %f %s" macro x y orient
+
+puts "Placing macro $macro at ($x, $y) orient $orient"
+place_macro -macro_name $macro -location "$x $y" -orientation $orient
+}
+close $fp
+}
+File Structure After Setup
+raheem@raheem:~/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc$ ls -ltrh
+total 3.1M
+-rw-rw-r-- 1 raheem raheem  590 Nov 13 20:54 vsdbabysoc.v
+-rwxrwxr-x 1 raheem raheem 1.3K Nov 13 20:54 testbench.v
+-rw-rw-r-- 1 raheem raheem  603 Nov 13 20:54 testbench.rvmyth.post-routing.v
+-rw-rw-r-- 1 raheem raheem 1.7K Nov 13 20:54 clk_gate.v
+-rw-rw-r-- 1 raheem raheem  947 Nov 13 20:54 avsdpll.v
+-rw-rw-r-- 1 raheem raheem 1.1K Nov 13 20:54 avsddac.v
+-rw-rw-r-- 1 raheem raheem  17K Nov 13 21:00 rvmyth.v
+-rw-rw-r-- 1 raheem raheem  19K Nov 13 21:00 rvmyth_gen.v
+-rw-rw-r-- 1 raheem raheem  50K Nov 13 21:21 primitives.v -> /home/raheem/Desktop/VLSI/VLSI/sky130RTLDesignAndSynthesisWorkshop/my_lib/verilog_model/primitives.v
+-rw-rw-r-- 1 raheem raheem 749K Nov 13 21:22 vsdbabysoc.synth.v
+-rw-rw-r-- 1 raheem raheem 2.3M Nov 13 21:29 sky130_fd_sc_hd.v
+raheem@raheem:~/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc$ ls -ltrh
+total 32K
+-rw-rw-r-- 1 raheem raheem   73 Nov 13 20:54 vsdbabysoc_synthesis.sdc
+-rw-rw-r-- 1 raheem raheem   62 Nov 13 20:54 pin_order.cfg -> /home/raheem/Desktop/VLSI/VSDBabySoC/src/layout_conf/vsdbabysoc/pin_order.cfg
+-rw-rw-r-- 1 raheem raheem   28 Nov 13 20:54 macro.cfg -> /home/raheem/Desktop/VLSI/VSDBabySoC/src/layout_conf/vsdbabysoc/macro.cfg
+drwxrwxr-x 2 raheem raheem 4.0K Nov 13 20:54 lef
+drwxrwxr-x 2 raheem raheem 4.0K Nov 13 20:54 include
+drwxrwxr-x 2 raheem raheem 4.0K Nov 13 20:54 gds
+-rw-rw-r-- 1 raheem raheem 2.2K Nov 15 18:45 config.mk
+drwxrwxr-x 2 raheem raheem 4.0K Nov 15 18:59 lib
+Now go to terminal and run the following commands:
+# Navigate to the OpenROAD flow scripts directory
+cd OpenROAD-flow-scripts
+# Source the environment setup script
+source env.sh
+# Change to the flow directory
+cd flow
+  <img width="731" height="267" alt="image" src="38.png" />
+
+Run Synthesis
+# Ensure you are in the 'flow' directory before running the synthesis command
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk clean_all
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk synth
+This command runs the synthesis process using the specified design configuration file config.mk for the vsdbabysoc design on the sky130hd platform.
+ <img width="731" height="267" alt="image" src="39.png" />
+  <img width="731" height="267" alt="image" src="40.png" />
+
+Synthesis netlist
+~/OpenROAD-flow-scripts/flow$ gvim results/sky130hd/vsdbabysoc/base/1_1_yosys.v
+  <img width="731" height="267" alt="image" src="41.png" />
+  Synthesis Stats
+~/OpenROAD-flow-scripts/flow$ gvim reports/sky130hd/vsdbabysoc/base/synth_stat.txt
+  <img width="731" height="267" alt="image" src="42.png" />
+  Run Floorplan
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk floorplan
+  <img width="731" height="267" alt="image" src="43.png" />
+  This command initiates the floorplanning process for the vsdbabysoc design using the specified configuration file config.mk on the sky130hd platform.
+
+Floorplan Error and Fix
+❗Note: You may encounter the following error:
+
+[ERROR STA-0164] .../vsdbabysoc/lib/avsdpll.lib line 54, syntax error
+Error: floorplan.tcl, 4 STA-0164
+Fix: This error is caused by commented block structures in your Liberty file avsdpll.lib. OpenROAD’s parser does not tolerate partially commented blocks like:
+
+//pin (GND#2) {
+//  direction : input;
+//  max_transition : 2.5;
+//  capacitance : 0.001;
+//}
+✅ To fix it, simply delete the entire commented block starting at line 54:
+
+After saving the changes, re-run the floorplan step and the flow should proceed without syntax errors.
+
+Floorplan Result (GUI)
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
+  <img width="731" height="267" alt="image" src="44.png" />
+    <img width="731" height="267" alt="image" src="45.png" />
+
+Run Placement
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
+This command executes the placement process for the vsdbabysoc design, utilizing the configuration file config.mk on the sky130hd platform to arrange the circuit components optimally within the defined floorplan.
+    <img width="731" height="267" alt="image" src="46.png" />
+
+Placement Result (GUI)
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
+ <img width="731" height="267" alt="image" src="47.png" />
+
+To view the Placement Density heatmap in OpenROAD:
+
+Go to Tools → Heat maps → Placement Density → ✓ Show numbers
+ <img width="731" height="267" alt="image" src="48.png" />
+
+run cts
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
+ <img width="731" height="267" alt="image" src="49.png" />
+CTS Result (GUI)
+
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_cts
+This image shows the Clock Tree Synthesis (CTS) stage, highlighting a placed clock buffer (clkbuf_leaf_209_CLK) with its properties displayed in the Inspector, including position, orientation, and connectivity details.
+ <img width="731" height="267" alt="image" src="50.png" />
+This image shows the Clock Tree Viewer after CTS, illustrating the clock buffer distribution on the layout and a histogram of clock insertion delays, indicating balanced clock skew across the sinks.
+ <img width="731" height="267" alt="image" src="51.png" />
+This image shows the Setup Timing Report, presenting a list of timing paths with key metrics such as:
+
+Required Time
+Arrival Time
+Slack
+Skew
+Logic Delay
+Logic Depth
+Fanout
+All paths have positive slack, confirming that the design meets setup timing requirements.
+ <img width="731" height="267" alt="image" src="52.png" />
+
+This image displays the Hold Timing Report, showing timing paths with details such as:
+
+Required Time
+Arrival Time
+Slack
+Skew
+Logic Delay
+Fanout
+All paths listed have positive slack, indicating that the design meets hold timing requirements and is free from hold violations.
+ <img width="731" height="267" alt="image" src="53.png" />
+This image shows the Setup Slack Histogram after CTS. The histogram represents the distribution of endpoint slack values, all of which are positive, indicating that there are no setup timing violations.
+ <img width="731" height="267" alt="image" src="54.png" />
+This image shows the Hold Slack Histogram after CTS. The histogram represents the distribution of hold slack values for all endpoints. All values are positive, confirming that the design meets hold timing requirements without any violations.
+
+ <img width="731" height="267" alt="image" src="55.png" />
+Zoomed-in view of the design after CTS, showing inserted clock buffers and routing connections.
+ <img width="731" height="267" alt="image" src="56.png" />
+CTS final report:
+
+gvim /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/reports/sky130hd/vsdbabysoc/base/4_cts_final.rpt
+4_cts_final.rpt
+run routing
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk route
+
 
