@@ -399,13 +399,13 @@ iverilog -o ~/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/post_synth_sim.out -
 | **Option / Argument**                                                      | **Purpose / Description**                                                            |
 | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `iverilog`                                                                 | Icarus Verilog compiler used to compile Verilog files into a simulation executable.  |
-| `-o /home/pathanrehman/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/post_synth_sim.out` | Specifies the output binary file for simulation.                                     |
+| `-o /home/raheem/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/post_synth_sim.out` | Specifies the output binary file for simulation.                                     |
 | `-DPOST_SYNTH_SIM`                                                         | Defines the macro `POST_SYNTH_SIM` (used in testbench to switch simulation modes).   |
 | `-DFUNCTIONAL`                                                             | Defines `FUNCTIONAL` to use behavioral models instead of detailed gate-level timing. |
 | `-DUNIT_DELAY=#1`                                                          | Assigns a unit delay of `#1` to all gates for post-synthesis simulation.             |
-| `-I /home/pathanrehman/Desktop/VLSI/VSDBabySoC/src/include`                              | Adds the `include` directory to the search path for `\`include\` directives.         |
-| `-I /home/pathanrehman/Desktop/VLSI/VSDBabySoC/src/module`                               | Adds the `module` directory to the include path for additional module references.    |
-| `/home/pathanrehman/Desktop/VLSI/VSDBabySoC/src/module/testbench.v`                      | Specifies the testbench file as the top-level design for simulation.                 |
+| `-I /home/raheem/Desktop/VLSI/VSDBabySoC/src/include`                              | Adds the `include` directory to the search path for `\`include\` directives.         |
+| `-I /home/raheem/Desktop/VLSI/VSDBabySoC/src/module`                               | Adds the `module` directory to the include path for additional module references.    |
+| `/home/raheem/Desktop/VLSI/VSDBabySoC/src/module/testbench.v`                      | Specifies the testbench file as the top-level design for simulation.                 |
 
 #### ❗Note - You may encounter this error:
 ```bash
@@ -935,12 +935,12 @@ Inside the `flow/` Directory
    export PLATFORM    = sky130hd
 
   # Design Paths
-  export vsdbabysoc_DIR = /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/$(DESIGN_NICKNAME)
+  export vsdbabysoc_DIR = /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/$(DESIGN_NICKNAME)
 
   # Explicitly list Verilog files for synthesis
-   export VERILOG_FILES = /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v \
-                         /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v \
-                         /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v
+   export VERILOG_FILES = /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v \
+                         /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v \
+                         /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v
 
 
   # Include Directory for Verilog Header Files
@@ -1020,32 +1020,32 @@ This script sets up environment variables and configurations for the design and 
 - **PLATFORM**: Specifies the technology platform as "sky130hd," indicating the process node and design rules to be used.
 
 #### Design Paths
-- **vsdbabysoc_DIR**: Defines the directory path for the design files as `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc`. This path is constructed using the DESIGN_NICKNAME variable, ensuring consistency and easy access to design resources.
+- **vsdbabysoc_DIR**: Defines the directory path for the design files as `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc`. This path is constructed using the DESIGN_NICKNAME variable, ensuring consistency and easy access to design resources.
 
 #### Verilog Files for Synthesis
 - **VERILOG_FILES**: Lists the Verilog source files required for synthesis:
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v`: The main Verilog file for the SoC design.
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v`: A module within the design, possibly a RISC-V core or related component.
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v`: A module for clock gating, used to manage power consumption by controlling clock signals.
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v`: The main Verilog file for the SoC design.
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v`: A module within the design, possibly a RISC-V core or related component.
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v`: A module for clock gating, used to manage power consumption by controlling clock signals.
 
 #### Verilog Header Files
-- **VERILOG_INCLUDE_DIRS**: Specifies the directory for Verilog header files as `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/include`.
+- **VERILOG_INCLUDE_DIRS**: Specifies the directory for Verilog header files as `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/include`.
 
 #### Constraints and Additional Files
-- **SDC_FILE**: Points to the constraints file for synthesis located at `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_synthesis.sdc`.
+- **SDC_FILE**: Points to the constraints file for synthesis located at `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_synthesis.sdc`.
 - **ADDITIONAL_GDS**: Lists additional GDS files required for the design:
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsddac.gds`
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsdpll.gds`
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsddac.gds`
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/gds/avsdpll.gds`
 - **ADDITIONAL_LEFS**: Lists additional LEF files:
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsddac.lef`
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsdpll.lef`
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsddac.lef`
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsdpll.lef`
 - **ADDITIONAL_LIBS**: Lists additional LIB files:
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsddac.lib`
-  - `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsdpll.lib`
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsddac.lib`
+  - `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lib/avsdpll.lib`
 
 #### Pin Order and Macro Placement
-- **FP_PIN_ORDER_CFG**: Configuration file for pin order located at `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/pin_order.cfg`.
-- **MACRO_PLACEMENT_CFG**: Configuration file for macro placement located at `/home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/macro.cfg`.
+- **FP_PIN_ORDER_CFG**: Configuration file for pin order located at `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/pin_order.cfg`.
+- **MACRO_PLACEMENT_CFG**: Configuration file for macro placement located at `/home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/macro.cfg`.
 
 #### Clock Configuration
 - **CLOCK_PORT & CLOCK_NET**: Defines the clock port and net as `CLK`.
@@ -1302,32 +1302,32 @@ close $fp
 ### `File Structure After Setup`
 
 ```shell
-pathanrehman@pathanrehman:~/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc$ ls -ltrh
+raheem@raheem:~/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc$ ls -ltrh
 total 3.1M
--rw-rw-r-- 1 pathanrehman pathanrehman  590 Nov 13 20:54 vsdbabysoc.v
--rwxrwxr-x 1 pathanrehman pathanrehman 1.3K Nov 13 20:54 testbench.v
--rw-rw-r-- 1 pathanrehman pathanrehman  603 Nov 13 20:54 testbench.rvmyth.post-routing.v
--rw-rw-r-- 1 pathanrehman pathanrehman 1.7K Nov 13 20:54 clk_gate.v
--rw-rw-r-- 1 pathanrehman pathanrehman  947 Nov 13 20:54 avsdpll.v
--rw-rw-r-- 1 pathanrehman pathanrehman 1.1K Nov 13 20:54 avsddac.v
--rw-rw-r-- 1 pathanrehman pathanrehman  17K Nov 13 21:00 rvmyth.v
--rw-rw-r-- 1 pathanrehman pathanrehman  19K Nov 13 21:00 rvmyth_gen.v
--rw-rw-r-- 1 pathanrehman pathanrehman  50K Nov 13 21:21 primitives.v -> /home/pathanrehman/Desktop/VLSI/VLSI/sky130RTLDesignAndSynthesisWorkshop/my_lib/verilog_model/primitives.v
--rw-rw-r-- 1 pathanrehman pathanrehman 749K Nov 13 21:22 vsdbabysoc.synth.v
--rw-rw-r-- 1 pathanrehman pathanrehman 2.3M Nov 13 21:29 sky130_fd_sc_hd.v
+-rw-rw-r-- 1 raheem raheem  590 Nov 13 20:54 vsdbabysoc.v
+-rwxrwxr-x 1 raheem raheem 1.3K Nov 13 20:54 testbench.v
+-rw-rw-r-- 1 raheem raheem  603 Nov 13 20:54 testbench.rvmyth.post-routing.v
+-rw-rw-r-- 1 raheem raheem 1.7K Nov 13 20:54 clk_gate.v
+-rw-rw-r-- 1 raheem raheem  947 Nov 13 20:54 avsdpll.v
+-rw-rw-r-- 1 raheem raheem 1.1K Nov 13 20:54 avsddac.v
+-rw-rw-r-- 1 raheem raheem  17K Nov 13 21:00 rvmyth.v
+-rw-rw-r-- 1 raheem raheem  19K Nov 13 21:00 rvmyth_gen.v
+-rw-rw-r-- 1 raheem raheem  50K Nov 13 21:21 primitives.v -> /home/raheem/Desktop/VLSI/VLSI/sky130RTLDesignAndSynthesisWorkshop/my_lib/verilog_model/primitives.v
+-rw-rw-r-- 1 raheem raheem 749K Nov 13 21:22 vsdbabysoc.synth.v
+-rw-rw-r-- 1 raheem raheem 2.3M Nov 13 21:29 sky130_fd_sc_hd.v
 ```
 
 ```shell
-pathanrehman@pathanrehman:~/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc$ ls -ltrh
+raheem@raheem:~/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc$ ls -ltrh
 total 32K
--rw-rw-r-- 1 pathanrehman pathanrehman   73 Nov 13 20:54 vsdbabysoc_synthesis.sdc
--rw-rw-r-- 1 pathanrehman pathanrehman   62 Nov 13 20:54 pin_order.cfg -> /home/pathanrehman/Desktop/VLSI/VSDBabySoC/src/layout_conf/vsdbabysoc/pin_order.cfg
--rw-rw-r-- 1 pathanrehman pathanrehman   28 Nov 13 20:54 macro.cfg -> /home/pathanrehman/Desktop/VLSI/VSDBabySoC/src/layout_conf/vsdbabysoc/macro.cfg
-drwxrwxr-x 2 pathanrehman pathanrehman 4.0K Nov 13 20:54 lef
-drwxrwxr-x 2 pathanrehman pathanrehman 4.0K Nov 13 20:54 include
-drwxrwxr-x 2 pathanrehman pathanrehman 4.0K Nov 13 20:54 gds
--rw-rw-r-- 1 pathanrehman pathanrehman 2.2K Nov 15 18:45 config.mk
-drwxrwxr-x 2 pathanrehman pathanrehman 4.0K Nov 15 18:59 lib
+-rw-rw-r-- 1 raheem raheem   73 Nov 13 20:54 vsdbabysoc_synthesis.sdc
+-rw-rw-r-- 1 raheem raheem   62 Nov 13 20:54 pin_order.cfg -> /home/raheem/Desktop/VLSI/VSDBabySoC/src/layout_conf/vsdbabysoc/pin_order.cfg
+-rw-rw-r-- 1 raheem raheem   28 Nov 13 20:54 macro.cfg -> /home/raheem/Desktop/VLSI/VSDBabySoC/src/layout_conf/vsdbabysoc/macro.cfg
+drwxrwxr-x 2 raheem raheem 4.0K Nov 13 20:54 lef
+drwxrwxr-x 2 raheem raheem 4.0K Nov 13 20:54 include
+drwxrwxr-x 2 raheem raheem 4.0K Nov 13 20:54 gds
+-rw-rw-r-- 1 raheem raheem 2.2K Nov 15 18:45 config.mk
+drwxrwxr-x 2 raheem raheem 4.0K Nov 15 18:59 lib
 
 ```
 
@@ -1638,7 +1638,7 @@ Zoomed-in view of the design after CTS, showing inserted clock buffers and routi
 **CTS final report:**
 
 ```shell
-gvim /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/reports/sky130hd/vsdbabysoc/base/4_cts_final.rpt
+gvim /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/reports/sky130hd/vsdbabysoc/base/4_cts_final.rpt
 ```
 
 <details> <summary><strong>4_cts_final.rpt</strong></summary>
@@ -2249,14 +2249,14 @@ source env.sh
 cd flow
 openroad
 # Load the .odb database file
-read_db /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.odb
+read_db /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.odb
 # Write out the DEF file
-write_def /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.def
+write_def /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.def
 ```
 <img width="1605" height="452" alt="image" src="63.png" />
 
 ```shell
-gvim /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.def
+gvim /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.def
 ```
 
 <img width="1603" height="897" alt="image" src="64.png" />
@@ -2284,19 +2284,19 @@ Once inside the OpenROAD shell, run the following commands in sequence to load t
 
 These files describe the physical dimensions and metal/via layers for standard cells and macros:
 ```shell
-read_lef /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/sky130hd.lef
-read_lef /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsdpll.lef
-read_lef /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsddac.lef
+read_lef /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/sky130hd.lef
+read_lef /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsdpll.lef
+read_lef /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/lef/avsddac.lef
 ```
 
 This file contains timing and power data for the standard cells:
 ```shell
-read_liberty /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/platforms/sky130hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/platforms/sky130hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
 
 The DEF file represents the post-route physical layout of the design:
 ```shell
-read_def /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.def
+read_def /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.def
 ```
 
 <img width="1598" height="810" alt="image" src="66.png" />
@@ -2309,7 +2309,7 @@ After loading the LEF, Liberty, and DEF files, run the following commands to def
 Set the process corner using the available Calibre-based extraction rules file:
 
 ```tcl
-define_process_corner -ext_model_index 0 /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/external-resources/open_pdks/sky130/openlane/rules.openrcx.sky130A.nom.calibre
+define_process_corner -ext_model_index 0 /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/external-resources/open_pdks/sky130/openlane/rules.openrcx.sky130A.nom.calibre
 ```
 
 #### 🔹 2. Extract Parasitics
@@ -2317,21 +2317,21 @@ define_process_corner -ext_model_index 0 /home/pathanrehman/Desktop/VLSI/OpenROA
 Run parasitic extraction using the same file:
 
 ```shell
-extract_parasitics -ext_model_file /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/external-resources/open_pdks/sky130/openlane/rules.openrcx.sky130A.nom.calibre
+extract_parasitics -ext_model_file /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/external-resources/open_pdks/sky130/openlane/rules.openrcx.sky130A.nom.calibre
 ```
 
 #### 🔹 3. Write SPEF File
 Save the extracted parasitics:
 
 ```shell
-write_spef /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc.spef
+write_spef /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc.spef
 ```
 
 #### 🔹 4. Write Post-Placement Verilog Netlist
 Save the netlist after placement and routing:
 
 ```shell
-write_verilog /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_post_place.v
+write_verilog /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_post_place.v
 ```
 
 <img width="738" height="291" alt="image" src="67.png" />
@@ -2339,7 +2339,7 @@ write_verilog /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs
 The Standard Parasitic Exchange Format (SPEF) file captures the resistance and capacitance (RC) parasitics of interconnects extracted from the routed layout. This file is essential for accurate post-route static timing analysis (STA) as it models real-world wire delays caused by metal layers and vias. Tools like OpenSTA read the SPEF file to compute timing paths that reflect true physical behavior after routing. Generating and inspecting the SPEF ensures that your design is signoff-ready with precise timing estimates.
 
 ```shell
-gvim /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc.spef
+gvim /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc.spef
 ```
 
 <img width="1602" height="899" alt="image" src="68.png" />
@@ -2347,7 +2347,7 @@ gvim /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd
 The post-placement Verilog netlist represents the logical connectivity of the design after placement and routing have been completed. This version of the netlist includes any modifications made by optimization or physical synthesis during the backend flow and ensures consistency with the final layout. It is used in downstream verification flows and enables correlation between logical simulation and physical implementation. Writing this netlist is crucial for timing closure and for validating the final connectivity of the design.
 
 ```shell
-gvim /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_post_place.v
+gvim /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_post_place.v
 ```
 
 <img width="1598" height="900" alt="image" src="69.png" />
