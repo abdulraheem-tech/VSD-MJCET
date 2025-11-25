@@ -2276,7 +2276,7 @@ cd flow/
 openroad
 ```
 
-<img width="1607" height="243" alt="image" src="65.png" />
+<img width="1607" height="243" alt="image" src=".png" />
 
 ### `Step 2: Load Design and Technology Files`
 
@@ -2299,7 +2299,7 @@ The DEF file represents the post-route physical layout of the design:
 read_def /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/results/sky130hd/vsdbabysoc/base/5_2_route.def
 ```
 
-<img width="1598" height="810" alt="image" src="66.png" />
+<img width="1598" height="810" alt="image" src="png" />
 
 ### `Step 3: RC Extraction and Output Generation`
 
@@ -2334,7 +2334,7 @@ Save the netlist after placement and routing:
 write_verilog /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/vsdbabysoc/vsdbabysoc_post_place.v
 ```
 
-<img width="738" height="291" alt="image" src=".png" />
+<img width="738" height="291" alt="image" src="67.png" />
 
 The Standard Parasitic Exchange Format (SPEF) file captures the resistance and capacitance (RC) parasitics of interconnects extracted from the routed layout. This file is essential for accurate post-route static timing analysis (STA) as it models real-world wire delays caused by metal layers and vias. Tools like OpenSTA read the SPEF file to compute timing paths that reflect true physical behavior after routing. Generating and inspecting the SPEF ensures that your design is signoff-ready with precise timing estimates.
 
