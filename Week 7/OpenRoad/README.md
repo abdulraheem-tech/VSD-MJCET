@@ -202,7 +202,7 @@ yosys
 ```bash
 yosys> read_verilog src/module/vsdbabysoc.v 
 ```
-<img width="694" height="103" alt="image" src="14.png" />
+<img width="1214" height="270" alt="image" src="14.png" />
 
 - The following cp commands copy essential header files from the src/include directory into the working directory. These include:
 
@@ -220,7 +220,7 @@ cp -r src/include/sandpiper_gen.vh .
 ls
 ```
 
-<img width="983" height="140" alt="image" src="15.png" />
+<img width="1214" height="280" alt="image" src="15.png" />
 
 - Read the rvmyth.v file with the include path using -I option.
 ```bash
@@ -447,7 +447,7 @@ iverilog -o ~/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/post_synth_sim.out -
 gtkwave post_synth_sim.vcd
 ```
 ---
-<img width="889" height="143" alt="image" src="27.png" />
+<img width="1214" height="333" alt="image" src="27.png" />
 <img width="1214" height="767" alt="image" src="28.png" />
 
 ## Comparing Pre-Synthesis and Post-Synthesis Output
@@ -796,8 +796,8 @@ sudo apt install -y build-essential cmake clang g++ gcc git python3 python3-dev 
   swig libpcre3-dev qtbase5-dev liblemon-dev libspdlog-dev libeigen3-dev libffi-dev \
   pkg-config libjson-c-dev libzstd-dev
 ```
-<img width="731" height="506" alt="image" src="35.png" />
-
+<img width="731" height="506" alt="image" src="OP01.png" />
+<img width="731" height="506" alt="image" src="OP1.png" />
 
 ## 📦 Step 2: Clone the Repositories
 Install OpenROAD-flow scripts (wrapper for Yosys, OpenROAD, etc.):
@@ -807,7 +807,7 @@ git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow-scri
 cd OpenROAD-flow-scripts
 ```
 
-<img width="735" height="550" alt="image" src="36.png" />
+<img width="731" height="506" alt="image" src="OP2.png" />
 
 
 ## ⚙️ Step 3: Run the Setup Script
@@ -818,7 +818,7 @@ sudo ./setup.sh
 ```
 This step sets up everything OpenROAD depends on — including Boost, SWIG, Abseil, and more.
 
-<img width="733" height="553" alt="image"src="37.png" />
+<img width="739" height="561" alt="image" src="37.png" />
 
 
 ## 🏗️ Step 4: Build OpenROAD Locally
@@ -837,7 +837,7 @@ If tests fail to build (common Google Test issue), you can skip them:
 ./build_openroad.sh --local --disable-tests
 ```
 
-<img width="742" height="553" alt="image" hello/assets/00d86fd0-4f8e-4be0-99d1-b92f6a095070" />
+
 
 
 ## Step 5: Verify Installation
@@ -861,7 +861,7 @@ cd flow
 make
 ```
 
-<img width="739" height="557" alt="image"src="40.png" />
+<img width="739" height="561" alt="image" src="40.png" />
 
 
 ## Step 7. Launch the graphical user interface (GUI) to visualize the final layout
@@ -903,7 +903,7 @@ Inside the `flow/` Directory
 │   ├── scripts                 
 ```
 <img width="736" height="212" alt="image" src="43.png" />
-
+<img width="739" height="561" alt="image" src="43a.png" />
 # Floorplan and Placement of VSDBabySoC in OpenROAD
 
 ###  `RTL2GDS Flow for VSDBabySoC: Initial Steps`
@@ -1342,7 +1342,7 @@ source env.sh
 cd flow
 ```
 
-<img width="739" height="78" alt="image" src="44.png" />
+<img width="739" height="580" alt="image" src="44.png" />
 
 ----
  
