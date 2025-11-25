@@ -821,12 +821,12 @@ Key Components of config.mk
    export PLATFORM    = sky130hd
 
   # Design Paths
-  export vsdbabysoc_DIR = /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/$(DESIGN_NICKNAME)
+  export vsdbabysoc_DIR = /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/sky130hd/$(DESIGN_NICKNAME)
 
   # Explicitly list Verilog files for synthesis
-   export VERILOG_FILES = /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v \
-                         /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v \
-                         /home/pathanrehman/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v
+   export VERILOG_FILES = /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/vsdbabysoc.v \
+                         /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/rvmyth.v \
+                         /home/raheem/Desktop/VLSI/OpenROAD-flow-scripts/flow/designs/src/vsdbabysoc/clk_gate.v
 
 
   # Include Directory for Verilog Header Files
