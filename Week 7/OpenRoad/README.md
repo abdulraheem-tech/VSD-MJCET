@@ -1533,7 +1533,7 @@ After saving the changes, re-run the floorplan step and the flow should proceed 
 ```shell
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ```
-
+<img width="735" height="527" alt="image" src="45.png" />
 
 ------
 
@@ -1542,6 +1542,7 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ```shell
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
 ```
+<img width="735" height="527" alt="image" src="46.png" />
 This command executes the placement process for the `vsdbabysoc` design, utilizing the configuration file `config.mk` on the `sky130hd` platform to arrange the circuit components optimally within the defined floorplan.
 
 
@@ -1551,7 +1552,7 @@ This command executes the placement process for the `vsdbabysoc` design, utilizi
 ```shell
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 ```
-
+<img width="735" height="527" alt="image" src="47.png" />
 
 To view the Placement Density heatmap in OpenROAD:
 
@@ -1564,7 +1565,7 @@ Go to **Tools → Heat maps → Placement Density** → **✓ Show numbers**
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
 ```
 
-
+<img width="735" height="527" alt="image" src="cts.jpg" />
 
 **CTS Result (GUI)**
 
