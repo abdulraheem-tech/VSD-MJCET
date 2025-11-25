@@ -62,7 +62,7 @@ python3 -m venv sp_env
 source sp_env/bin/activate
 ```
 
-<img width="1215" height="123" alt="image" src="4.png" />
+<img width="1215" height="423" alt="image" src="4.png" />
 
 ```
 # Step 3: Install SandPiper-SaaS inside the virtual environment
@@ -111,7 +111,7 @@ Then run:
 cd output/pre_synth_sim
 ./pre_synth_sim.out
 ```
-<img width="894" height="44" alt="image" src="9.png" />
+<img width="894" height="544" alt="image" src="9.png" />
 
 Explanation:
 
@@ -202,7 +202,7 @@ yosys
 ```bash
 yosys> read_verilog src/module/vsdbabysoc.v 
 ```
-<img width="1214" height="270" alt="image" src="14.png" />
+<img width="1214" height="570" alt="image" src="14.png" />
 
 - The following cp commands copy essential header files from the src/include directory into the working directory. These include:
 
@@ -220,7 +220,7 @@ cp -r src/include/sandpiper_gen.vh .
 ls
 ```
 
-<img width="1214" height="280" alt="image" src="15.png" />
+<img width="1214" height="580" alt="image" src="15.png" />
 
 - Read the rvmyth.v file with the include path using -I option.
 ```bash
@@ -240,7 +240,7 @@ _To avoid these errors, make sure to copy the required include files into your w
 yosys> read_verilog -I ~/Desktop/VLSI/VSDBabySoC/src/include/ ~/Desktop/VLSI/VSDBabySoC/src/module/clk_gate.v
 ```
 
-<img width="1046" height="123" alt="image" src="17.png" />
+<img width="1046" height="523" alt="image" src="17.png" />
 
 ### **Step 2: Load the Liberty Files for Synthesis**
 Inside the same yosys shell, run:
@@ -437,7 +437,7 @@ cd output/post_synth_sim/
 iverilog -o ~/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/post_synth_sim.out -DPOST_SYNTH_SIM -DFUNCTIONAL -DUNIT_DELAY=#1 -I ~/Desktop/VLSI/VSDBabySoC/src/include -I ~/Desktop/VLSI/VSDBabySoC/src/module ~/Desktop/VLSI/VSDBabySoC/src/module/testbench.v
 ./post_synth_sim.out
 ```
-<img width="1215" height="262" alt="image" src="26.png" />
+<img width="1215" height="562" alt="image" src="26.png" />
 
 ---
 
@@ -447,7 +447,7 @@ iverilog -o ~/Desktop/VLSI/VSDBabySoC/output/post_synth_sim/post_synth_sim.out -
 gtkwave post_synth_sim.vcd
 ```
 ---
-<img width="1214" height="333" alt="image" src="27.png" />
+<img width="1214" height="533" alt="image" src="27.png" />
 <img width="1214" height="767" alt="image" src="28.png" />
 
 ## Comparing Pre-Synthesis and Post-Synthesis Output
@@ -1534,8 +1534,6 @@ After saving the changes, re-run the floorplan step and the flow should proceed 
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ```
 
-<img width="1211" height="697" alt="image" hello/assets/18c89dcd-6ddf-4d32-ad7b-98df16f6e5ec" />
-<img width="1280" height="728" alt="image" hello/assets/734a8cb0-48fb-4e9d-8994-46eb0d163794" />
 
 ------
 
@@ -1546,9 +1544,6 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
 ```
 This command executes the placement process for the `vsdbabysoc` design, utilizing the configuration file `config.mk` on the `sky130hd` platform to arrange the circuit components optimally within the defined floorplan.
 
-<img width="1285" height="720" alt="image" hello/assets/e40ec7e0-dab9-4177-a00d-b9d1424a2276" />
-
-<img width="1285" height="728" alt="image" hello/assets/7ba9a0d6-ecfa-4e93-9b90-58d0e94d7b02" />
 
 
 #### Placement Result (GUI)
@@ -1556,13 +1551,12 @@ This command executes the placement process for the `vsdbabysoc` design, utilizi
 ```shell
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 ```
-<img width="1284" height="726" alt="image" hello/assets/41cacfab-899a-4000-a74d-d35b40e47cc0" />
+
 
 To view the Placement Density heatmap in OpenROAD:
 
 Go to **Tools → Heat maps → Placement Density** → **✓ Show numbers**
 
-<img width="1281" height="728" alt="image" hello/assets/5a63a429-408a-4417-99c4-186585a4493b" />
 
 ### `run cts`
 
@@ -1570,7 +1564,6 @@ Go to **Tools → Heat maps → Placement Density** → **✓ Show numbers**
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
 ```
 
-<img width="741" height="527" alt="image" hello/assets/20916df1-a169-47f4-84b4-7102227e5f92" />
 
 
 **CTS Result (GUI)**
@@ -2276,7 +2269,7 @@ cd flow/
 openroad
 ```
 
-<img width="1607" height="243" alt="image" src=".png" />
+
 
 ### `Step 2: Load Design and Technology Files`
 
