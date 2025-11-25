@@ -978,13 +978,13 @@ Edit global_route.tcl
 The Fix: Comment Out the "Extra" Optimizations Since we cannot disable this step via config.mk, we must comment it out in the Tcl script. You don't need Power Recovery for this design anyway.
 Step 1: Open the Script Open the file global_route.tcl in your text editor. (It is likely located at flow/scripts/global_route.tcl or inside your scripts folder).
 Step 2: Comment Out Power Recovery Find the section that looks like this (around line 100-110) and add # to the start of every line to disable it:
-# ----------------- COMMENT THIS BLOCK OUT -----------------
-# log_cmd global_route -start_incremental
-# recover_power_helper
-# # Route the modified nets by rsz journal restore
-# log_cmd global_route -end_incremental {*}$res_aware \
-#   -congestion_report_file $::env(REPORTS_DIR)/congestion_post_recover_power.rpt
-# -----------------------------------------------------------
+ ----------------- COMMENT THIS BLOCK OUT -----------------
+ log_cmd global_route -start_incremental
+ recover_power_helper
+ # Route the modified nets by rsz journal restore
+ log_cmd global_route -end_incremental {*}$res_aware \
+   -congestion_report_file $::env(REPORTS_DIR)/congestion_post_recover_power.rpt
+ -----------------------------------------------------------
 global_route.tcl
   utl::set_metrics_stage "globalroute__{}"
   source $::env(SCRIPTS_DIR)/load.tcl
